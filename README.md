@@ -3,7 +3,7 @@ Decode your binary format ProxySQL query log.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/tiket-oss/go-pxld)](https://goreportcard.com/report/github.com/tiket-oss/go-pxld)
 [![Documentation](https://godoc.org/github.com/tiket-oss/go-pxld?status.svg)](http://godoc.org/github.com/tiket-oss/go-pxld)
-[![license](https://img.shields.io/github.com/tiket-oss/go-pxld.svg?maxAge=2592000)](https://github.com/tiket-oss/go-pxld/LICENSE)
+[![license](https://img.shields.io/github/license/tiket-oss/go-pxld.svg)](https://github.com/tiket-oss/go-pxld/LICENSE)
 
 ## Requirement
 
