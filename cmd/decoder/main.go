@@ -2,7 +2,7 @@ package main
 
 import (
 	log "github.com/sirupsen/logrus"
-	"github.com/tiket-oss/pxld"
+	"github.com/tiket-oss/go-pxld"
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"encoding/json"
