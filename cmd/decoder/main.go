@@ -5,15 +5,18 @@ import (
 	"github.com/tiket-oss/go-pxld"
 	"gopkg.in/alecthomas/kingpin.v2"
 
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
+	"net/url"
 	"time"
 )
 
 var (
 	targetFile  = kingpin.Flag("target", "Target file to decode").Required().ExistingFile()
-	output      = kingpin.Flag("output", "Output of this, can be file path or omit if stdout").Default("").String()
+	output      = kingpin.Flag("output", "Output of this, can be file path, http address (60s timeout), or omit to stdout").Default("").String()
 	repeatEvery = kingpin.Flag("repeat", "Repeat reading from the target file every n seconds, useful for reading logrotated file").Duration()
 )
 
@@ -53,9 +56,32 @@ func do() {
 			log.Fatalf("Unexpected error while marshaling  file %s to JSON: %v", *targetFile, err)
 		}
 
-		err = ioutil.WriteFile(*output, raw, 0644)
-		if err != nil {
-			log.Fatalf("Unexpected error while writing file %s JSON to %s: %v", *targetFile, *output, err)
+		if isValidURL(*output) {
+			cli := &http.Client{
+				Timeout: time.Minute,
+			}
+			res, err := cli.Post(*output, "application/json", bytes.NewReader(raw))
+			if err != nil {
+				log.Fatalf("Unexpected error while sending file %s JSON to %s: %v", *targetFile, *output, err)
+			}
+			if res.StatusCode >= http.StatusBadRequest {
+				err = fmt.Errorf("invalid response status code %d", res.StatusCode)
+				log.Fatalf("Unexpected error while sending file %s JSON to %s: %v", *targetFile, *output, err)
+			}
+		} else {
+			err = ioutil.WriteFile(*output, raw, 0644)
+			if err != nil {
+				log.Fatalf("Unexpected error while writing file %s JSON to %s: %v", *targetFile, *output, err)
+			}
 		}
 	}
+}
+
+func isValidURL(toTest string) bool {
+	_, err := url.ParseRequestURI(toTest)
+	if err != nil {
+		return false
+	}
+
+	return true
 }
