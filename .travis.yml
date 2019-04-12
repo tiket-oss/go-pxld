@@ -1,0 +1,42 @@
+---
+
+# use the latest ubuntu environment (18.04) available on travis
+dist: xenial
+
+language: go
+
+# Force-enable Go modules. Also force Go to use the code in vendor/
+# These will both be unnecessary when Go 1.13 lands.
+env:
+  - GO111MODULE=on
+  - GOFLAGS='-mod vendor'
+#  - secure: "" # This is encrypted COVERALLS_TOKEN='mytoken'
+
+# You don't need to test on very old versions of the Go compiler. It's the user's
+# responsibility to keep their compiler up to date.
+go:
+  - 1.11.x
+
+# Only clone the most recent commit.
+git:
+  depth: 1
+
+# Get utility dependencies.
+install: 
+  - go get github.com/golangci/golangci-lint
+  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+#  - go get golang.org/x/tools/cmd/cover
+#  - go get github.com/mattn/goveralls
+
+# Don't email the results of the test runs.
+notifications:
+  email: false
+
+# script always runs to completion (set +e). If we have linter issues AND a
+# failing test, we want to see both. Configure golangci-lint with a
+# .golangci.yml file at the top level of your repo.
+script:
+  - golangci-lint run       # run a bunch of code checkers/linters in parallel
+  - go test -v -race ./...  # Run all the tests with the race detector enabled
+#  - go test -v -covermode=count -coverprofile=coverage.out
+#  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
