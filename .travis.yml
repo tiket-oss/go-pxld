@@ -8,9 +8,7 @@ language: go
 # Force-enable Go modules. Also force Go to use the code in vendor/
 # These will both be unnecessary when Go 1.13 lands.
 env:
-  - GO111MODULE=on
-  - GOFLAGS='-mod vendor'
-#  - secure: "" # This is encrypted COVERALLS_TOKEN='mytoken'
+  - GO111MODULE=on #secure: "" # This is encrypted COVERALLS_TOKEN='mytoken'
 
 # You don't need to test on very old versions of the Go compiler. It's the user's
 # responsibility to keep their compiler up to date.
