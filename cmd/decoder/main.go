@@ -79,9 +79,5 @@ func do() {
 
 func isValidURL(toTest string) bool {
 	_, err := url.ParseRequestURI(toTest)
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err == nil
 }
