@@ -19,6 +19,10 @@ go:
 git:
   depth: 1
 
+# Set things before installing
+before_install:
+  - export TZ=Asia/Jakarta
+
 # Get utility dependencies.
 install: 
   - go get github.com/golangci/golangci-lint
