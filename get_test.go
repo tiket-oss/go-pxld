@@ -264,7 +264,7 @@ func TestGetQueryDigest(t *testing.T) {
 
 	digestStr, err := GetQueryDigest(buf)
 	require.NoError(t, err)
-	require.Equal(t, "0x14BA1FD6AE231F4D", digestStr)
+	require.Equal(t, "0xD61FBA144D1F23AE", digestStr)
 }
 
 func TestGetQueryDigestNegative(t *testing.T) {
