@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// LogLine is the representation of the log message's binary data in Go struct
 type LogLine struct {
 	MessageLength uint64        `json:"message_length"`
 	RawMessage    []byte        `json:"raw_message"` // this is without message length data prepended
@@ -30,6 +31,7 @@ func (l *LogLine) String() string {
 	return string(raw)
 }
 
+// Decode is used to decode a ProxySQL's query log data into a slice of LogLine
 func Decode(r io.Reader) (l []*LogLine, err error) {
 	l = []*LogLine{}
 
@@ -50,6 +52,7 @@ func Decode(r io.Reader) (l []*LogLine, err error) {
 	return
 }
 
+// DecodeFile is used to decode a ProxySQL's query log file into a slice of LogLine
 func DecodeFile(fp string) (l []*LogLine, err error) {
 	var f *os.File
 	f, err = os.OpenFile(fp, os.O_RDWR|os.O_CREATE, 0755)

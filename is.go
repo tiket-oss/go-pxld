@@ -7,9 +7,11 @@ import (
 )
 
 const (
+	// ProxySQLQuery byte should be 0
 	ProxySQLQuery = 0
 )
 
+// IsProxySQLQuery check if the data is a valid proxysql event
 func IsProxySQLQuery(dataStream io.Reader) (err error) {
 	data := make([]byte, 1)
 
