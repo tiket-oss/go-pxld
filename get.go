@@ -60,21 +60,12 @@ func GetQueryDigest(dataStream io.Reader) (digest string, err error) {
 		return
 	}
 
-	// turn the digestRaw into TWO uint32
 	// first we need to convert it back into []byte
 	buf := make([]byte, 8)
 	binary.LittleEndian.PutUint64(buf, digestRaw)
 
-	// then split it into two
-	b1 := buf[:4]
-	b2 := buf[4:]
-
-	// then convert them into uint32
-	d1 := binary.LittleEndian.Uint32(b1)
-	d2 := binary.LittleEndian.Uint32(b2)
-
 	// then turn into hex string
-	digest = fmt.Sprintf("0x%X%X", d1, d2)
+	digest = fmt.Sprintf("0x%X", buf)
 
 	return
 }
