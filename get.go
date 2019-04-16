@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// GetMessageLength is used to get message data length
 func GetMessageLength(dataStream io.Reader) (dataLength uint64, err error) {
 	data := make([]byte, 8)
 
@@ -21,38 +22,47 @@ func GetMessageLength(dataStream io.Reader) (dataLength uint64, err error) {
 	return
 }
 
+// GetThreadID is used to obtain thread id
 func GetThreadID(dataStream io.Reader) (threadID uint64, err error) {
 	return GetEncodedLength(dataStream)
 }
 
+// GetUsername is used to obtain querier username
 func GetUsername(dataStream io.Reader) (username string, err error) {
 	return GetString(dataStream)
 }
 
+// GetSchema is used to get schema of a query
 func GetSchema(dataStream io.Reader) (schema string, err error) {
 	return GetString(dataStream)
 }
 
+// GetClientAddr is used to get client address of querier
 func GetClientAddr(dataStream io.Reader) (clientAddr string, err error) {
 	return GetString(dataStream)
 }
 
+// GetHID is used to get HID of a query, if not 0xFFFFFFFF we can get server address
 func GetHID(dataStream io.Reader) (hid uint64, err error) {
 	return GetEncodedLength(dataStream)
 }
 
+// GetServerAddr is used to get target server address for the query
 func GetServerAddr(dataStream io.Reader) (serverAddr string, err error) {
 	return GetString(dataStream)
 }
 
+// GetStartAt is used to get query start time in UNIX microseconds
 func GetStartAt(dataStream io.Reader) (startAt time.Time, err error) {
 	return GetTime(dataStream)
 }
 
+// GetEndAt is used to get query end time in UNIX microseconds
 func GetEndAt(dataStream io.Reader) (endAt time.Time, err error) {
 	return GetTime(dataStream)
 }
 
+// GetQueryDigest is used to get query's digest
 func GetQueryDigest(dataStream io.Reader) (digest string, err error) {
 	var digestRaw uint64
 	digestRaw, err = GetEncodedLength(dataStream)
@@ -70,10 +80,12 @@ func GetQueryDigest(dataStream io.Reader) (digest string, err error) {
 	return
 }
 
+// GetQuery is used to get string representation of the query
 func GetQuery(dataStream io.Reader) (q string, err error) {
 	return GetString(dataStream)
 }
 
+// GetTime is used to get time from query log data
 func GetTime(dataStream io.Reader) (t time.Time, err error) {
 	var unixMicrosecond uint64
 	unixMicrosecond, err = GetEncodedLength(dataStream)
@@ -86,6 +98,7 @@ func GetTime(dataStream io.Reader) (t time.Time, err error) {
 	return
 }
 
+// GetString is used to get string from query log data
 func GetString(dataStream io.Reader) (s string, err error) {
 	var n uint64
 	n, err = GetEncodedLength(dataStream)
@@ -104,6 +117,7 @@ func GetString(dataStream io.Reader) (s string, err error) {
 	return
 }
 
+// GetEncodedLength is used to get message length from query log data
 func GetEncodedLength(dataStream io.Reader) (ln uint64, err error) {
 	// get first byte
 	lenFlag := make([]byte, 1)
@@ -151,6 +165,7 @@ func GetEncodedLength(dataStream io.Reader) (ln uint64, err error) {
 	return
 }
 
+// GetMessage is used to get the message from query log data
 func GetMessage(messageLength uint64, dataStream io.Reader) (raw []byte, buf io.Reader, err error) {
 	raw = make([]byte, int(messageLength))
 
